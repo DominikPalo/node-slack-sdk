@@ -87,16 +87,50 @@ export interface MessageAttachment {
   footer?: string;
   footer_icon?: string; // footer must be present
   ts?: string;
-  actions?: { // note: this is a very minimal definition of link buttons, interactive buttons, and message menus
-    type: string;
-    text?: string;
-  }[];
+  actions?: (ActionButton | ActionSelect)[];
   callback_id?: string;
   mrkdwn_in?: ('pretext' | 'text' | 'fields')[];
 }
 
 export interface LinkUnfurls {
   [linkUrl: string]: MessageAttachment;
+}
+
+export interface ActionButton {
+  name?: string; // name is not required for link buttons
+  text: string;
+  type: 'button';
+  value?: string;
+  confirm?: any;
+  style?: 'default' | 'primary' | 'danger';
+  url?: string;
+}
+
+export interface ActionSelect {
+  name: string;
+  text: string;
+  type: 'select';
+  value?: string;
+  confirm?: {
+    title?: string;
+    text: string;
+    ok_text?: string;
+    dismiss_text?: string;
+  };
+  options?: ActionSelectOption[];
+  option_groups?: {
+    text: string;
+    options: ActionSelectOption;
+  }[];
+  data_source?: 'static' | 'users' | 'channels' | 'conversations' | 'external'; // default?
+  selected_options?: ActionSelectOption[];
+  min_query_length?: number;
+}
+
+export interface ActionSelectOption {
+  text: string;
+  value: string;
+  description?: string;
 }
 
 /*
